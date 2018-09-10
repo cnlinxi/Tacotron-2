@@ -1,4 +1,25 @@
-# Tacotron-2:
+# Tacotron-2
+
+fork from [Rayhane-mamah/Tacotron-2@github](https://github.com/Rayhane-mamah/Tacotron-2)
+
+## Change Log
+
+- 2018/09/10
+
+  - delete some symbols in tacotron/utils/symbols.py
+
+- 2018/09/07
+
+  - modify datasets/preprocessor.py to train model on [THCHS-30](http://www.openslr.org/18)
+  - add transform_pinyin.py to transform Chinese into pinyin if you want to valid this model
+  - modify some hyper parameter in hparams.py
+    - tacotron_decay_steps = 40000  # Determines the learning rate decay slope (UNDER TEST)
+    - tacotron_decay_rate = 0.2  # learning rate decay rate (UNDER TEST)
+
+  Note: If you want to train model on [THCHS-30](http://www.openslr.org/18), download and unzip it in project root directory. The file structure of dataset should be ./data_thchs30/data...
+
+****
+
 Tensorflow implementation of DeepMind's Tacotron-2. A deep neural network architecture described in this paper: [Natural TTS synthesis by conditioning Wavenet on MEL spectogram predictions](https://arxiv.org/pdf/1712.05884.pdf)
 
 

@@ -26,9 +26,11 @@ class Synthesizer:
 				self.model.initialize(inputs, input_lengths, targets, gta=gta)
 			else:
 				self.model.initialize(inputs, input_lengths)
-			self.mel_outputs = self.model.mel_outputs
-			self.linear_outputs = self.model.linear_outputs if (hparams.predict_linear and not gta) else None
 			self.alignments = self.model.alignments
+			self.mel_outputs = self.model.mel_outputs
+			if hparams.predict_linear and not gta:
+				self.linear_outputs = self.model.linear_outputs
+				self.linear_wav_outputs = audio.inv_spectrogram_tensorflow(self.model.linear_outputs[0], hparams)
 
 		self.gta = gta
 		self._hparams = hparams
@@ -77,7 +79,7 @@ class Synthesizer:
 				assert len(mels) == len(np_targets)
 
 		else:
-			linears, mels, alignments = self.session.run([self.linear_outputs, self.mel_outputs, self.alignments], feed_dict=feed_dict)
+			linear_wavs, linears, mels, alignments = self.session.run([self.linear_wav_outputs, self.linear_outputs, self.mel_outputs, self.alignments], feed_dict=feed_dict)
 
 		if basenames is None:
 			#Generate wav and read it
@@ -117,31 +119,31 @@ class Synthesizer:
 
 			# Write the spectrogram to disk
 			# Note: outputs mel-spectrogram files and target ones have same names, just different folders
-			mel_filename = os.path.join(out_dir, 'mel-{}.npy'.format(basenames[i]))
+			mel_filename = os.path.join(out_dir, 'mel-{:03d}.npy'.format(basenames[i]))
 			np.save(mel_filename, mel, allow_pickle=False)
 			saved_mels_paths.append(mel_filename)
 
 			if log_dir is not None:
 				#save wav (mel -> wav)
-				wav = audio.inv_mel_spectrogram(mel.T, hparams)
-				audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{}-mel.wav'.format(basenames[i])), sr=hparams.sample_rate)
+				# wav = audio.inv_mel_spectrogram(mel.T, hparams)
+				# audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{:03d}-mel.wav'.format(basenames[i])), sr=hparams.sample_rate)
 
 				#save alignments
-				plot.plot_alignment(alignments[i], os.path.join(log_dir, 'plots/alignment-{}.png'.format(basenames[i])),
-					info='{}'.format(texts[i]), split_title=True)
+				# plot.plot_alignment(alignments[i], os.path.join(log_dir, 'plots/alignment-{:03d}.png'.format(basenames[i])),
+				# 	info='{}'.format(texts[i]), split_title=True)
 
 				#save mel spectrogram plot
-				plot.plot_spectrogram(mel, os.path.join(log_dir, 'plots/mel-{}.png'.format(basenames[i])),
-					info='{}'.format(texts[i]), split_title=True)
+				# plot.plot_spectrogram(mel, os.path.join(log_dir, 'plots/mel-{:03d}.png'.format(basenames[i])),
+				# 	info='{}'.format(texts[i]), split_title=True)
 
 				if hparams.predict_linear:
 					#save wav (linear -> wav)
-					wav = audio.inv_linear_spectrogram(linears[i].T, hparams)
-					audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{}-linear.wav'.format(basenames[i])), sr=hparams.sample_rate)
+					wav = audio.inv_preemphasis(linear_wavs, hparams.preemphasis)
+					audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{:03d}-linear.wav'.format(basenames[i])), sr=hparams.sample_rate)
 
 					#save mel spectrogram plot
-					plot.plot_spectrogram(linears[i], os.path.join(log_dir, 'plots/linear-{}.png'.format(basenames[i])),
-						info='{}'.format(texts[i]), split_title=True, auto_aspect=True)
+					# plot.plot_spectrogram(linears[i], os.path.join(log_dir, 'plots/linear-{:03d}.png'.format(basenames[i])),
+					# 	info='{}'.format(texts[i]), split_title=True, auto_aspect=True)
 
 
 
