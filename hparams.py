@@ -29,9 +29,9 @@ hparams = tf.contrib.training.HParams(
 
 	#Mel spectrogram
 	n_fft = 2048, #Extra window size is filled with 0 paddings to match this parameter
-	hop_size = 275, #For 22050Hz, 275 ~= 12.5 ms # mod: 256
-	win_size = 1100, #For 22050Hz, 1100 ~= 50 ms (If None, win_size = n_fft) # mod: 1024
-	sample_rate = 22050, #22050 Hz (corresponding to ljspeech dataset)
+	hop_size = 200,  # origin: 275, For 22050Hz, 275 ~= 12.5 ms # mod: 256, 帧移, # mod: 200
+	win_size = 800,  # origin: 1100, For 22050Hz, 1100 ~= 50 ms (If None, win_size = n_fft) # mod: 1024  #mod: 800
+	sample_rate = 16000,  # origin: 22050, 22050 Hz (corresponding to ljspeech dataset)  # mod: 16000
 	frame_shift_ms = None,
 	preemphasis = 0.97, # preemphasis coefficient
 

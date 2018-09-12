@@ -4,11 +4,22 @@ fork from [Rayhane-mamah/Tacotron-2@github](https://github.com/Rayhane-mamah/Tac
 
 ## Change Log
 
-- 2018/09/10
+- 2018/09/12: tacotron2_mod_some_params_3
+
+  - modify some hyper parameters in hparams.py for thchs-30
+    - hop_size = 200
+    - win_size = 800
+    - sample_rate = 16000
+
+- 2018/09/10: tacotron2_delete_some_symbols
 
   - delete some symbols in tacotron/utils/symbols.py
 
-- 2018/09/07
+  **result**
+
+  - speed up the training: the same loss, speed up about 7k steps, under test...
+
+- 2018/09/07: tacotron2_mod_params_2
 
   - modify datasets/preprocessor.py to train model on [THCHS-30](http://www.openslr.org/18)
   - add transform_pinyin.py to transform Chinese into pinyin if you want to valid this model
@@ -17,6 +28,11 @@ fork from [Rayhane-mamah/Tacotron-2@github](https://github.com/Rayhane-mamah/Tac
     - tacotron_decay_rate = 0.2  # learning rate decay rate (UNDER TEST)
 
   Note: If you want to train model on [THCHS-30](http://www.openslr.org/18), download and unzip it in project root directory. The file structure of dataset should be ./data_thchs30/data...
+
+  **result**
+
+  - succeed in training model on thchs-30 and generating waveform :)
+  - syntheticed speech is *a bit fast*
 
 ****
 

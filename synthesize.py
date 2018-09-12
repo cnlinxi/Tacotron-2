@@ -38,8 +38,9 @@ def synthesize(args, hparams, taco_checkpoint, wave_checkpoint, sentences):
     # Delete Tacotron model from graph
     tf.reset_default_graph()
     log('Synthesizing audio from mel-spectrograms.. (This may take a while)')
-    wavenet_synthesize(args, hparams, wave_checkpoint)
-    log('Tacotron-2 TTS synthesis complete!')
+    # generate waveform by griffin-lim because wavenet is time-costing...
+    # wavenet_synthesize(args, hparams, wave_checkpoint)
+    # log('Tacotron-2 TTS synthesis complete!')
 
 
 def main():
