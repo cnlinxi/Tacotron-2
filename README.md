@@ -4,6 +4,22 @@ fork from [Rayhane-mamah/Tacotron-2@github](https://github.com/Rayhane-mamah/Tac
 
 ## Change Log
 
+- 2018/09/25: tacotron2_mlp_stop_token
+
+  - predict stop token by mlp(4 layers) instead of LR. Not test...
+
+- 2018/09/25: tacotron2_cut_words
+
+  - Cut words by jieba first, there is no space in pinyin of a phrase. Under test...
+
+- 2018/09/17: tacotron_3673
+
+  - use private dataset which named 3673. In this dataset, some texts have errors.
+
+  **result**
+
+  - equal to thchs-30, even some little bad...
+
 - 2018/09/12: tacotron2_mod_some_params_3
 
   - modify some hyper parameters in hparams.py for thchs-30
@@ -11,13 +27,17 @@ fork from [Rayhane-mamah/Tacotron-2@github](https://github.com/Rayhane-mamah/Tac
     - win_size = 800
     - sample_rate = 16000
 
+  **result**
+
+  - *no effect*
+
 - 2018/09/10: tacotron2_delete_some_symbols
 
   - delete some symbols in tacotron/utils/symbols.py
 
   **result**
 
-  - speed up the training: the same loss, speed up about 7k steps, under test...
+  - speed up the training: the same loss, speed up about 7k steps
 
 - 2018/09/07: tacotron2_mod_params_2
 

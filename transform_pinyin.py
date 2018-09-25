@@ -5,6 +5,7 @@
 # @Software: PyCharm
 
 from pypinyin import lazy_pinyin, Style
+import jieba
 
 def is_chinses(uchar):
     if uchar > u'\u4e00' and uchar <= u'\u9fa5':
@@ -18,18 +19,24 @@ def clean_line(line):
     line = line.split('|')
     assert len(line) == 2
     line = line[1]
-    for char in line:
-        if is_chinses(char):
-            cleaned_line.append(char)
-        elif char=='，':
-            cleaned_line.append(',')
-        elif char=='。':
-            cleaned_line.append('.')
+    line=line.replace('，',',')
+    line=line.replace('。','.')
+    # for char in line:
+    #     if is_chinses(char):
+    #         cleaned_line.append(char)
+        # elif char==' ':
+        #     cleaned_line.append(' ')
+        # elif char=='，':
+        #     cleaned_line.append(',')
+        # elif char=='。':
+        #     cleaned_line.append('.')
+    cleaned_line=' '.join(jieba.cut(line))
+    cleaned_line=cleaned_line.strip(' ')
     return cleaned_line
 
 
 def get_pinyin(line):
-    return lazy_pinyin(line, style=Style.TONE3)
+    return ''.join(lazy_pinyin(line, style=Style.TONE3))
 
 
 def transform_pinyin_to_file(data_path, output_path):
@@ -40,7 +47,6 @@ def transform_pinyin_to_file(data_path, output_path):
             if not line:
                 continue
             transformed_line = get_pinyin(line)
-            transformed_line = ' '.join(transformed_line)
             fout.write(f'{transformed_line}\n'.encode('utf-8'))
 
 
